@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Face Recognition</title>
+    <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap");
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+
+        }
+
+        header {
+            background-color: #0077b6;
+            color: white;
+            height: 100px;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            padding-left: 30px;
+            /* justify-content: center; */
+        }
+
+        .container {
+
+            background-color: #d2ebf9;
+            /* background-image: url("{{ url_for('static', filename='logo/background.jpg') }}");
+            background-position: center;
+            background-blend-mode: soft-light; */
+        }
+
+        /* .header-content {
+            display: flex;
+            align-items: center;
+        }
+
+        header h1 {
+            margin-left: 13px;
+            margin-top: 0;
+            font-size: 40px;
+        }
+
+        .date-time {
+            margin-left: auto;
+
+            font-size: 16px;
+        }
+
+        #currentDateTime {
+            color: white;
+            font-weight: bold;
+        } */
+
+        /* header {
+            background-color: #333;
+            color: white;
+            height: 100px;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        } */
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            /* max-width: 1200px; */
+        }
+
+        header h1 {
+            margin-left: 15px;
+            font-size: 28px;
+        }
+
+        .logo-icon {
+            width: 60px;
+            height: 60px;
+        }
+
+        .date-time {
+            margin-left: auto;
+
+            font-size: 15px;
+        }
+
+        #currentDate,
+        #currentTime {
+            color: white;
+            padding-right: 30px;
+        }
+
+
+        footer {
+            background-color: #0077b6;
+            /* background-color: #333; */
+            color: white;
+            padding: 10px;
+            text-align: center;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 80vh;
+        }
+
+        .video-frame {
+            text-align: center;
+            margin-bottom: 5px;
+            margin-top: 20px;
+        }
+
+        .video-frame img {
+            max-width: 100%;
+            height: auto;
+            border: 2px solid #333;
+        }
+
+        /* Sidebar Styles */
+
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Poppins", sans-serif;
+        }
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            /* top: 0; */
+            height: 100%;
+            width: 78px;
+            /* background: #0096c7; */
+            background: #001d3d;
+            padding: 6px 14px;
+            /* z-index: 99; */
+            transition: all 0.5s ease;
+        }
+
+        .sidebar.open {
+            width: 250px;
+        }
+
+        .sidebar .logo-details {
+            height: 60px;
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        .sidebar .logo-details .icon {
+            opacity: 0;
+            transition: all 0.5s ease;
+        }
+
+        .sidebar .logo-details .logo_name {
+            color: #fff;
+            font-size: 20px;
+            font-weight: 600;
+            opacity: 0;
+            transition: all 0.5s ease;
+        }
+
+        .sidebar.open .logo-details .icon,
+        .sidebar.open .logo-details .logo_name {
+            opacity: 1;
+        }
+
+        .sidebar .logo-details #btn {
+            position: absolute;
+            top: 50%;
+            right: 0;
+            transform: translateY(-50%);
+            font-size: 22px;
+            transition: all 0.4s ease;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .sidebar.open .logo-details #btn {
+            text-align: right;
+        }
+
+        .sidebar i {
+            color: #fff;
+            height: 60px;
+            min-width: 50px;
+            font-size: 28px;
+            text-align: center;
+            line-height: 60px;
+        }
+
+        .sidebar .nav-list {
+            /* margin-top: 20px; */
+            height: 100%;
+        }
+
+        .sidebar li {
+            position: relative;
+            margin: 8px 0;
+            list-style: none;
+        }
+
+        .sidebar li a {
+            display: flex;
+            height: 100%;
+            width: 100%;
+            border-radius: 12px;
+            align-items: center;
+            text-decoration: none;
+            transition: all 0.4s ease;
+            background: #5e95e7;
+        }
+
+        .sidebar li a:hover {
+            background: #fff;
+        }
+
+        .sidebar li a .links_name {
+            color: #fff;
+            font-size: 15px;
+            font-weight: 400;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: 0.4s;
+        }
+
+        .sidebar.open li a .links_name {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .sidebar li a:hover .links_name,
+        .sidebar li a:hover i {
+            transition: all 0.5s ease;
+            color: #11101d;
+        }
+
+        .sidebar li .tooltip {
+            position: absolute;
+            top: -20px;
+            left: calc(100% + 15px);
+            z-index: 3;
+            background: #fff;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 15px;
+            font-weight: 400;
+            opacity: 0;
+            white-space: nowrap;
+            pointer-events: none;
+            transition: 0s;
+        }
+
+        .sidebar li:hover .tooltip {
+            opacity: 1;
+            pointer-events: auto;
+            transition: all 0.4s ease;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .sidebar.open li .tooltip {
+            display: block;
+        }
+
+        .logo-icon {
+
+            height: 70px;
+        }
+
+        /* Chatbot Button */
+        #chatbot-btn {
+            position: fixed;
+            bottom: 66px;
+            right: 40px;
+            background-color: #001d3d;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+
+        }
+
+        .chatbot-icon {
+            width: 50px;
+            height: 50px;
+        }
+
+        .tooltip {
+            visibility: hidden;
+            width: 120px;
+            color: #001d3d;
+            font-size: 16px;
+            text-align: center;
+            border-radius: 5px;
+            padding: 5px;
+            position: absolute;
+            bottom: 70px;
+            right: 37px;
+            transform: translateX(50%);
+            z-index: 999;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+
+        #chatbot-btn:hover .tooltip {
+            visibility: visible;
+            opacity: 1;
+        }
+
+
+        /* Chatbot Container */
+        #chatbot-container {
+            position: fixed;
+            bottom: 62px;
+            right: 20px;
+            width: 350px;
+            height: 450px;
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            display: none;
+            z-index: 1000;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* Chatbot Header */
+        #chatbot-header {
+            background-color: #001d3d;
+            color: white;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        #chatbot-header h3 {
+            margin: 0;
+            font-size: 18px;
+        }
+
+        #chatbot-minimize {
+            background-color: transparent;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        /* Chatbot Body */
+        #chatbot-body {
+            flex: 1;
+            padding: 10px;
+            overflow-y: auto;
+        }
+
+        /* Chatbot Input */
+        #chatbot-input {
+            display: flex;
+            padding: 10px;
+            border-top: 1px solid #ccc;
+            background-color: #f9f9f9;
+        }
+
+        #chatbot-input input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            outline: none;
+        }
+
+        #chatbot-input button {
+            margin-left: 10px;
+            padding: 10px;
+            background-color: #0077b6;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="header-content">
+            <img src="{{ url_for('static', filename='logo/icon.png') }}" alt="Raksha Alert Logo" class="logo-icon" />
+            <h1>Raksha Alert</h1>
+            <div class="date-time">
+                <span id="currentDate"></span> <br>
+                <span id="currentTime"></span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo-details">
+
+            <i class="bx bx-menu" id="btn"></i>
+        </div>
+        <ul class="nav-list">
+            <li>
+                <a href="{{ url_for('member') }}">
+                    <i class="bx bx-user-plus"></i>
+                    <span class="links_name">Add Member</span>
+                </a>
+                <span class="tooltip">Add Member</span>
+            </li>
+            <li>
+                <a href="{{ url_for('unknown') }}">
+                    <i class="bx bx-user-x"></i>
+                    <span class="links_name">Unknown Members</span>
+                </a>
+                <span class="tooltip">Unknown Members</span>
+            </li>
+            <li>
+                <a href="{{ url_for('about') }}">
+                    <i class='bx bx-info-circle'></i>
+                    <span class="links_name">About Us</span>
+                </a>
+                <span class="tooltip">About Us</span>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Centered Video Frame -->
+        <div class="video-frame">
+            <img src="{{ url_for('video_feed') }}" alt="Video Stream">
+        </div>
+
+    </div>
+
+
+    <!-- Centered Video Frame -->
+
+    <!-- Chatbot Button -->
+    <button id="chatbot-btn">
+        <img src="{{ url_for('static', filename='logo/chatbot-icon.png') }}" alt="Chatbot Icon" class="chatbot-icon">
+        <span class="tooltip">RakshaBot</span>
+    </button>
+
+    <!-- Chatbot Container -->
+    <div id="chatbot-container">
+        <div id="chatbot-header">
+            <h3>Chatbot</h3>
+            <button id="chatbot-minimize">–</button>
+        </div>
+        <div id="chatbot-body">
+            <div id="chat-log"> 
+                <p>Hello! How can I help you today?</p>
+            </div>
+        </div>
+        <div id="chatbot-input">
+            <input type="text" placeholder="Type your message..." id="chat-input">
+            <button type="submit" id="send-btn">Send</button>
+        </div>
+    </div>
+
+    </div>
+    <footer>
+        <p>&copy; 2024 Raksha Alert. All rights reserved.</p>
+    </footer>
+
+
+
+    <script>
+        function updateDateTime() {
+            const now = new Date();
+
+            let hours = now.getHours();
+            let minutes = now.getMinutes();
+            let seconds = now.getSeconds();
+            let ampm = hours >= 12 ? 'PM' : 'AM';
+
+            hours = hours % 12;
+            hours = hours ? hours : 12;
+
+            minutes = minutes < 10 ? '0' + minutes : minutes;
+            seconds = seconds < 10 ? '0' + seconds : seconds;
+
+            const day = now.getDate();
+            const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+            const month = monthNames[now.getMonth()];
+            const year = now.getFullYear();
+
+            const currentTime = `${hours}:${minutes}:${seconds} ${ampm}`;
+            const currentDate = `${day} ${month}, ${year}`;
+
+            document.getElementById('currentDate').innerText = currentDate;
+            document.getElementById('currentTime').innerText = currentTime;
+        }
+
+        setInterval(updateDateTime, 1000);
+        updateDateTime();
+    </script>
+
+
+
+    <script>
+        let sidebar = document.querySelector(".sidebar");
+        let closeBtn = document.querySelector("#btn");
+
+
+        closeBtn.addEventListener("click", () => {
+            sidebar.classList.toggle("open");
+            menuBtnChange(); //calling the function(optional)
+        });
+
+
+        function menuBtnChange() {
+            if (sidebar.classList.contains("open")) {
+                closeBtn.classList.replace("bx-menu", "bx-menu-alt-right");
+            } else {
+                closeBtn.classList.replace("bx-menu-alt-right", "bx-menu");
+            }
+        }
+    </script>
+
+
+    <script>
+    // Chatbot integration
+
+    const chatbotBtn = document.getElementById('chatbot-btn');
+    const chatbotContainer = document.getElementById('chatbot-container');
+    const chatbotMinimize = document.getElementById('chatbot-minimize');
+    const sendBtn = document.getElementById('send-btn');
+    const chatInput = document.getElementById('chat-input');
+    const chatLog = document.getElementById('chat-log'); 
+
+    const externalChatbotUrl = 'http://3.111.53.28:5000/chatbot'; // Replace with your external API URL
+    const localChatbotUrl = 'http://127.0.0.1:5001/chatbot';
+    
+    
+
+
+    // Toggle chatbot visibility on button click
+    chatbotBtn?.addEventListener('click', () => {
+        chatbotContainer.style.display = chatbotContainer.style.display === 'none' || chatbotContainer.style.display === '' ? 'flex' : 'none';
+    });
+
+    // Minimize chatbot
+    chatbotMinimize.addEventListener('click', () => {
+        chatbotContainer.style.display = 'none';
+    });
+
+    // Handle sending a message to the chatbot
+    sendBtn.addEventListener('click', async () => {
+        const userMessage = chatInput.value;
+        if (userMessage.trim() === '') return; 
+
+        // Display user message
+        const userMsgElement = document.createElement('p');
+        userMsgElement.textContent = `You: ${userMessage}`;
+        chatLog.appendChild(userMsgElement);
+
+        // Clear the input
+        chatInput.value = '';
+
+        // Try to send message to external chatbot API first
+        try {
+            const response = await fetch(externalChatbotUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ message: userMessage })
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                // Display chatbot response
+                const botMsgElement = document.createElement('p');
+                botMsgElement.textContent = `Bot: ${data.response}`;
+                chatLog.appendChild(botMsgElement);
+            } else {
+                throw new Error('External API error');
+            }
+        } catch (error) {
+            console.error('Error connecting to external chatbot, trying local:', error);
+            // If external fails, try local API
+            try {
+                const response = await fetch(localChatbotUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ message: userMessage })
+                });
+
+                const data = await response.json();
+                // Display chatbot response
+                const botMsgElement = document.createElement('p');
+                botMsgElement.textContent = `Bot: ${data.response}`;
+                chatLog.appendChild(botMsgElement);
+            } catch (error) {
+                console.error('Error connecting to local chatbot:', error);
+                const errorMsgElement = document.createElement('p');
+                errorMsgElement.textContent = 'Error connecting to both chatbots!';
+                chatLog.appendChild(errorMsgElement);
+            }
+        }
+    });
+</script>
+
+   
+</body>
+
+</html>

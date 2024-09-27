@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>About Us - Raksha Alert</title>
+    <link
+      href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+
+    <style>
+      /* Global Styles */
+      body {
+        font-family: "Roboto", sans-serif;
+        background-color: #f4f4f9;
+        margin: 0;
+        padding: 0;
+        color: #333;
+      }
+
+      /* Header Styling */
+      header {
+        background: linear-gradient(90deg, #0077b6, #00b4d8);
+        color: white;
+        height: 100px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        /* position: fixed; */
+        padding: 0 20px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    header h1 {
+        margin: 0;
+        font-size: 2rem;
+        letter-spacing: 1px;
+        text-align: center;
+    }
+
+      /* Container */
+      .container {
+        width: 85%;
+        max-width: 1200px;
+        margin: 30px auto;
+        padding: 20px;
+        background-color: white;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+      }
+
+     
+
+      .section {
+        margin-bottom: 40px;
+      }
+
+      .section-title {
+        margin-bottom: 15px;
+        font-size: 1.8rem;
+        font-weight: bold;
+        border-bottom: 3px solid #0077b6;
+        padding-bottom: 10px;
+      }
+
+      ul {
+        list-style-type: square;
+        padding-left: 20px;
+      }
+
+      ul li {
+        margin-bottom: 10px;
+      }
+      .back-link {
+        position: absolute;
+        left: 20px;
+        color: white;
+        text-decoration: none;
+        font-size: 2.8rem;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        transition: color 0.3s ease;
+      }
+
+      .back-link i {
+        margin-right: 8px;
+      }
+
+      .back-link:hover {
+        color: #ffc300;
+      }
+
+      /* Footer Styling */
+      footer {
+        background-color: #0077b6;
+        color: #fff;
+        text-align: center;
+        padding: 20px 0;
+        position: relative;
+        box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1);
+      }
+
+      footer p {
+        margin: 0;
+        font-size: 0.9rem;
+        letter-spacing: 1px;
+      }
+
+      /* Add media queries for responsiveness */
+      @media (max-width: 768px) {
+        header h1 {
+          font-size: 2rem;
+        }
+
+        .container {
+          width: 95%;
+        }
+
+        .section-title {
+          font-size: 1.5rem;
+        }
+      }
+
+      @media (max-width: 480px) {
+        header .back-link {
+          font-size: 1.5rem;
+        }
+
+        .section-title {
+          font-size: 1.4rem;
+        }
+
+        ul li {
+          font-size: 0.9rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <a href="{{ url_for('index') }}" class="back-link"
+        ><i class="bx bx-left-arrow-circle" style="color: #fff"></i
+      ></a>
+      <h1>About Raksha Alert</h1>
+    </header>
+
+    <div class="container">
+      <section class="section">
+        <h2 class="section-title">Overview</h2>
+        <p>
+          Raksha Alert is an advanced home security system that integrates
+          facial recognition, object detection, and voice-activated emergency
+          response into a unified solution. It provides real-time alerts,
+          detects both known and unknown individuals, and helps users respond
+          swiftly during emergencies.
+        </p>
+      </section>
+
+      <section class="section">
+        <h2 class="section-title">Why Raksha Alert?</h2>
+        <p>
+          Traditional home security systems primarily focus on basic detection
+          and fail to deliver real-time, interactive alerts. They often lack the
+          ability to distinguish between known and unknown individuals and
+          provide limited emergency response options.
+        </p>
+        <p>
+          Raksha Alert combines essential security features into a single,
+          easy-to-use platform, integrating advanced technologies like face
+          recognition, object detection, and voice-activated emergency
+          responses.
+        </p>
+      </section>
+
+      <section class="section">
+        <h2 class="section-title">Key Features</h2>
+        <ul>
+          <li>
+            <strong>Facial Recognition:</strong> Identifies both known and
+            unknown individuals.
+          </li>
+          <li>
+            <strong>Object Detection:</strong> Detects dangerous objects like
+            knives, guns, etc.
+          </li>
+          <li>
+            <strong>Voice-Activated Emergency Response:</strong> Uses voice
+            commands during emergencies.
+          </li>
+          <li>
+            <strong>Real-time Alerts:</strong> Provides instant notifications
+            with crucial details.
+          </li>
+          <li>
+            <strong>Integrated Security:</strong> Combines detection, alerts,
+            and emergency responses.
+          </li>
+        </ul>
+      </section>
+
+      <section class="section">
+        <h2 class="section-title">Technology Used</h2>
+        <p>The Raksha Alert system uses cutting-edge technology:</p>
+        <ul>
+          <li><strong>Python:</strong> Core development language.</li>
+          <li>
+            <strong>OpenCV:</strong> Used for image processing and facial
+            recognition.
+          </li>
+          <li>
+            <strong>Deep Learning (ML/DL):</strong> Improves face and object
+            detection accuracy.
+          </li>
+        </ul>
+      </section>
+
+      <section class="section">
+        <h2 class="section-title">Future Scope</h2>
+        <ul>
+          <li>
+            <strong>Emotion Recognition:</strong> Improved emotion detection for
+            better awareness.
+          </li>
+          <li>
+            <strong>Behavior Analysis:</strong> Detects suspicious or abnormal
+            activities.
+          </li>
+          <li>
+            <strong>IoT Integration:</strong> Seamless connection with smart
+            home devices.
+          </li>
+        </ul>
+      </section>
+
+      <section class="section">
+        <h2 class="section-title">Conclusion</h2>
+        <p>
+          Raksha Alert aims to redefine home security by providing a robust,
+          easy-to-use solution that integrates advanced technologies into a
+          single platform. It ensures a safer environment for families by
+          addressing the gaps left by traditional security systems.
+        </p>
+      </section>
+    </div>
+
+    <footer>
+      <p>&copy; 2024 Raksha Alert. All rights reserved.</p>
+    </footer>
+  </body>
+</html>

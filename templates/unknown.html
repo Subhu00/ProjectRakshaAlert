@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unknown Images</title>
+    <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+    <style>
+        /* Basic global styling */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #d2ebf9;
+            padding-bottom: 100px;
+            box-sizing: border-box;
+        }
+
+        /* Styling for header */
+        header {
+            background: linear-gradient(90deg, #0077b6, #00b4d8);
+            color: white;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: 0 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            letter-spacing: 1.5px;
+        }
+
+        .back-link {
+            position: absolute;
+            left: 20px;
+            color: white;
+            text-decoration: none;
+            font-size: 2.8rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            transition: color 0.3s ease;
+        }
+
+        .back-link i {
+            margin-right: 8px;
+        }
+
+        .back-link:hover {
+            color: #ffc300;
+        }
+
+        /* Styling for flash messages */
+        .flash-message {
+            color: #e63946;
+            background: #ffc3c3;
+            padding: 8px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            margin-top: 20px;
+            text-align: center;
+            font-size: 1.2rem;
+            width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Styling for the image grid */
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 20px auto;
+        }
+
+        /* Card styling */
+        .image-card {
+            background-color: #a0c0dfa1;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: box-shadow 0.3s ease;
+        }
+
+        .image-card:hover {
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .image-card img {
+            padding-top: 20px;
+            width: 100%;
+            height: 200px;
+            object-fit: contain;
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        
+        }
+
+        .image-card img:hover {
+            transform: scale(1.05);
+        }
+
+        /* Card content styling */
+        .card-content {
+            padding: 15px;
+            text-align: center;
+        }
+
+        .image-info {
+            margin-top: 10px;
+        }
+
+        .image-date,
+        .image-time {
+            font-size: 13px;
+            background-color: #5e95e7;
+            padding: 10px;
+            border-radius: 36px;
+            display: inline-block;
+            color: #fff;
+        }
+
+        /* Delete button styling */
+        .delete-button {
+            background-color: #e63946;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            display: block;
+            margin: 10px auto;
+        }
+
+        .delete-button:hover {
+            background-color: #d62839;
+        }
+
+        /* Footer styling */
+        footer {
+            background-color: #0077b6;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+            box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        footer p {
+            margin: 0;
+            font-size: 1rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>Unknown Images</h1>
+        <a href="{{ url_for('index') }}" class="back-link"><i class='bx bx-left-arrow-circle'></i></a>
+    </header>
+
+    <!-- Flash messages for success and error notifications -->
+    {% with messages = get_flashed_messages(with_categories=True) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    <div class="flash-message {{ category }}">
+        {{ message }}
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+    <div class="image-grid">
+        <!-- Loop to display unknown images -->
+        {% for image in unknown %}
+        <div class="image-card">
+            <img src="{{ url_for('serve_unknown_image', filename=image) }}" alt="{{ image }}" class="image-display">
+            <div class="card-content">
+                <form action="{{ url_for('delete_unknown_image', filename=image) }}" method="post">
+                    <div class="image-info"></div>
+
+                    <button type="submit" class="delete-button">Delete</button>
+                </form>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Raksha Alert. All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const images = document.querySelectorAll('.image-display');
+
+            images.forEach(function(img) {
+                const imageName = img.alt;
+                const nameParts = imageName.split('_');
+                const timestamp = nameParts.length > 1 ? nameParts[1] + '_' + nameParts[2].split('.')[0] : null;
+
+                if (timestamp) {
+                    const datePart = timestamp.split('_')[0];
+                    const timePart = timestamp.split('_')[1];
+
+                    const year = datePart.substring(0, 4);
+                    const month = datePart.substring(4, 6);
+                    const day = datePart.substring(6, 8);
+
+                    const hour = timePart.substring(0, 2);
+                    const minute = timePart.substring(2, 4);
+                    const second = timePart.substring(4, 6);
+
+                    let hours12 = hour % 12 || 12;
+                    let period = hour >= 12 ? 'PM' : 'AM';
+
+                    const formattedDate = `${day}:${month}:${year}`;
+                    const formattedTime = `${hours12}:${minute}:${second} ${period}`;
+
+                    const infoDiv = img.parentElement.querySelector('.image-info');
+                    infoDiv.innerHTML = `
+                        <p class="image-date">Date: ${formattedDate}</p>
+                        <p class="image-time">Time: ${formattedTime}</p>`;
+                }
+            });
+        });
+    </script>
+
+</body>
+
+</html>
